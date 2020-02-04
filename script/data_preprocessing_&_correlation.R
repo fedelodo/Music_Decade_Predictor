@@ -44,7 +44,7 @@ plot(cdf$label)
 
 rdata <- downsample(cdf, cat_col="label")
 plot(rdata$label)
-rdata <- normalize(rdata, method = "standardize")
+rdata <- normalize(rdata, method = "range", range = c(0, 1))
 
 # MATRICE DI CORRELAZIONE
 # M <- cor(rdata[,-1])

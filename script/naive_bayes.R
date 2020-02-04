@@ -1,4 +1,7 @@
 library("e1071")
+library("caret")
+library("ggplot2")
+library("dplyr")
 
 train = read.csv("train.csv", header=TRUE)
 train$label <- as.factor(train$label)
@@ -11,15 +14,49 @@ formula <- gsub("\n", "", formula)
 formula <- as.formula(formula)
 
 # e1071
-classifier = naiveBayes(train, train$label)
-test.predicted.bayes = predict(classifier, test)
-cm_bayes <- confusionMatrix(test$label, test.predicted.bayes)
-confusion_matrix.bayes <- table(test$label, test.predicted.bayes)
-acc_bayes <- sum(diag(confusion_matrix.bayes))/sum(confusion_matrix.bayes)
+model.bayes.e1071 = naiveBayes(train, train$label)
+pred.bayes.e1071 = predict(model.bayes.e1071, test)
+cm_bayes.e1071 <- confusionMatrix(test$label, pred.bayes.e1071)
+confusion_matrix.bayes.e1071 <- table(test$label, pred.bayes.e1071)
+acc_bayes.e1071 <- sum(diag(confusion_matrix.bayes.e1071))/sum(confusion_matrix.bayes.e1071)
 
 # CARET
-classifier.bayes.caret = train(train, train$label, "nb", trControl = trainControl(method = "cv", number = 10))
-test.predicted.bayes.caret = predict(classifier.bayes.caret, test)
-cm_bayes.caret <- confusionMatrix(test$label, test.predicted.bayes.caret)
-confusion_matrix.bayes.caret <- table(test$label, test.predicted.bayes.caret)
+model.bayes.caret = train(train, train$label, "nb", trControl = trainControl(method = "cv", number = 10))
+pred.bayes.caret = predict(model.bayes.caret, test)
+cm_bayes.caret <- confusionMatrix(test$label, pred.bayes.caret)
+confusion_matrix.bayes.caret <- table(test$label, pred.bayes.caret)
 acc_bayes.caret <- sum(diag(confusion_matrix.bayes.caret))/sum(confusion_matrix.bayes.caret)
+
+
+##plot confusion matrix
+# plot caret confusion matrix
+table.bayes.caret <- data.frame(cm_bayes.caret$table)
+
+plotTable.bayes.caret <- table.bayes.caret %>%
+  mutate(goodbad = ifelse(table.bayes.caret$Prediction == table.bayes.caret$Reference, "good", "bad")) %>%
+  group_by(Reference) %>%
+  mutate(prop = Freq/sum(Freq))
+
+ggplot(data = plotTable.bayes.caret, mapping = aes(x = Reference, y = Prediction, fill = goodbad, alpha = prop)) +
+  geom_tile() +
+  geom_text(aes(label = Freq), vjust = .5, fontface  = "bold", alpha = 1) +
+  scale_fill_manual(values = c(good = "green", bad = "red")) +
+  theme_bw() +
+  xlim(rev(levels(table.bayes.caret$Reference))) +
+  ggtitle("Confusion Matrix: NAIVE BAYES with Caret (on Normalize)")
+
+# plot e1071 confusion matrix
+table.bayes.e1071 <- data.frame(cm_bayes.e1071$table)
+
+plotTable.bayes.e1071 <- table.bayes.e1071 %>%
+  mutate(goodbad = ifelse(table.bayes.e1071$Prediction == table.bayes.e1071$Reference, "good", "bad")) %>%
+  group_by(Reference) %>%
+  mutate(prop = Freq/sum(Freq))
+
+ggplot(data = plotTable.bayes.e1071, mapping = aes(x = Reference, y = Prediction, fill = goodbad, alpha = prop)) +
+  geom_tile() +
+  geom_text(aes(label = Freq), vjust = .5, fontface  = "bold", alpha = 1) +
+  scale_fill_manual(values = c(good = "green", bad = "red")) +
+  theme_bw() +
+  xlim(rev(levels(table.bayes.e1071$Reference))) +
+  ggtitle("Confusion Matrix: NAIVE BAYES with e1071 (on Normalize)")
