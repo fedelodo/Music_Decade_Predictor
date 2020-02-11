@@ -12,7 +12,7 @@ formula <- readChar(fileName, file.info(fileName)$size)
 formula <- gsub("\n", "", formula)
 formula <- as.formula(formula)
 
-# svm
+# SVM
 model <- svm(formula,
              data = train,
              kernel='radial',

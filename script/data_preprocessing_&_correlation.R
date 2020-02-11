@@ -21,27 +21,6 @@ plot(cdf$label)
 #M <- cor(cdf)
 #corrplot(M, method="circle")
 
-## DATA DOWNSAMPLING
-# ns = 5000
-# col = "label"
-# x<-as.factor(cdf[,col])
-# freq_x<-table(x)
-# prob_x<-freq_x/sum(freq_x)
-# df_prob = prob_x[as.factor(cdf[,col])]
-# nr=nrow(cdf)
-# sLevels = levels(as.factor(cdf[,col]))
-# nLevels = length(sLevels)
-# rat = ns/nr
-# rdata = NULL
-# for (is in seq(1,nLevels)) {
-#    ldata <- cdf[cdf[,col]==sLevels[is],]
-#    ndata <- nrow(ldata)
-#    nsdata = max(ndata*rat,1)
-#    srows <- sample(seq(1,ndata),nsdata,replace=rat>1)
-#    sdata <- ldata[srows,]
-#    rdata <- rbind(rdata,sdata)
-# }
-
 rdata <- downsample(cdf, cat_col="label")
 plot(rdata$label)
 rdata <- normalize(rdata, method = "range", range = c(0, 1))

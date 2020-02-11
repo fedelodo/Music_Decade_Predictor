@@ -48,19 +48,16 @@ prec_svm.e1071.linear <- diag(confusion_matrix.svm.e1071.linear) / rowSums(confu
 rec_svm.e1071.linear <- diag(confusion_matrix.svm.e1071.linear) / colSums(confusion_matrix.svm.e1071.linear)
 f1_svm.e1071.linear <- 2 * (prec_svm.e1071.linear * rec_svm.e1071.linear) / (prec_svm.e1071.linear + rec_svm.e1071.linear)
 
-# # SVM Model Caret, RADIAL
-# #trctrl <- trainControl(method = "repeatedcv", number = 10, repeats = 10, savePredictions = TRUE)
-# set.seed(3233)
-# model <- train(formula, 
-#                     data = train, 
-#                     method = "svmRadial",
-#                     #trControl=trctrl,
-#                     preProcess = c("center", "scale"),
-#                     tuneLength = 10,
-#                     metric = "Accuracy")
-# pred <- predict(model, test)
-# cm <- table(pred, test$label)
-# acc <- sum(diag(cm)) / sum(cm)
+# SVM Model Caret, RADIAL (non termina)
+trctrl <- trainControl(method = "cv", number = 10)
+set.seed(3233)
+model <- train(formula,
+                    data = train,
+                    method = "svmRadial",
+                    trControl=trctrl)
+pred <- predict(model, test)
+cm <- table(pred, test$label)
+acc <- sum(diag(cm)) / sum(cm)
 
 
 ##plot confusion matrix

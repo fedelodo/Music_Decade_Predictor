@@ -1,5 +1,5 @@
 library("pROC")
-library("rpart")
+library("caret")
 
 # carico i dataset
 train = read.csv("train.csv", header=TRUE)
@@ -12,9 +12,10 @@ formula <- readChar(fileName, file.info(fileName)$size)
 formula <- gsub("\n", "", formula)
 formula <- as.formula(formula)
 
-# Decision tree
-model <- rpart(formula, data=train, method="class")
-pred <- as.numeric(predict(model, test, type="class"))
+# DECISION TREE CARET
+tc <- trainControl(method = "cv", number = 10)
+model <- train( formula, data = train, method = "ctree", trControl = tc, tuneLength = 10)
+pred <- as.numeric(predict(model, test))
 roc.multi_test <- multiclass.roc(test$label, pred)
 rs_test <- roc.multi_test[['rocs']]
 roc.list <- list("1950-1960"=rs_test[[1]],"1950-1970"=rs_test[[2]],
