@@ -18,15 +18,22 @@ model.bayes.e1071 = naiveBayes(train, train$label)
 pred.bayes.e1071 = predict(model.bayes.e1071, test)
 cm_bayes.e1071 <- confusionMatrix(test$label, pred.bayes.e1071)
 confusion_matrix.bayes.e1071 <- table(test$label, pred.bayes.e1071)
+# accuracy, precision, recall, f-measure
 acc_bayes.e1071 <- sum(diag(confusion_matrix.bayes.e1071))/sum(confusion_matrix.bayes.e1071)
+prec_bayes.e1071 <- diag(confusion_matrix.bayes.e1071) / rowSums(confusion_matrix.bayes.e1071)
+rec_bayes.e1071 <- diag(confusion_matrix.bayes.e1071) / rowSums(confusion_matrix.bayes.e1071)
+f1_bayes.e1071 <- 2 * (prec_bayes.e1071 * rec_bayes.e1071) / (prec_bayes.e1071 + rec_bayes.e1071)
 
 # CARET
 model.bayes.caret = train(train, train$label, "nb", trControl = trainControl(method = "cv", number = 10))
 pred.bayes.caret = predict(model.bayes.caret, test)
 cm_bayes.caret <- confusionMatrix(test$label, pred.bayes.caret)
 confusion_matrix.bayes.caret <- table(test$label, pred.bayes.caret)
+# accuracy, precision, recall, f-measure
 acc_bayes.caret <- sum(diag(confusion_matrix.bayes.caret))/sum(confusion_matrix.bayes.caret)
-
+prec_bayes.caret <- diag(confusion_matrix.bayes.caret) / rowSums(confusion_matrix.bayes.caret)
+rec_bayes.caret <- diag(confusion_matrix.bayes.caret) / colSums(confusion_matrix.bayes.caret)
+f1_bayes.caret <- 2 * (prec_bayes.caret * rec_bayes.caret) / (prec_bayes.caret + rec_bayes.caret)
 
 ##plot confusion matrix
 # plot caret confusion matrix

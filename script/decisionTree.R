@@ -24,7 +24,11 @@ fancyRpartPlot(model.decisiontree.rpart)
 pred.decisiontree.rpart <- predict(model.decisiontree.rpart, test, type="class")
 cm_decisiontree.rpart <- confusionMatrix(test$label, pred.decisiontree.rpart)
 confusion_matrix.decisiontree.rpart = table(test$label, pred.decisiontree.rpart)
+# accuracy, precision, recall, f-measure
 acc_decisiontree.rpart <- sum(diag(confusion_matrix.decisiontree.rpart))/sum(confusion_matrix.decisiontree.rpart)
+prec_decisiontree.rpart <- diag(confusion_matrix.decisiontree.rpart) / rowSums(confusion_matrix.decisiontree.rpart)
+rec_decisiontree.rpart <- diag(confusion_matrix.decisiontree.rpart) / colSums(confusion_matrix.decisiontree.rpart)
+f1_decisiontree.rpart <- 2 * (prec_decisiontree.rpart * rec_decisiontree.rpart) / (prec_decisiontree.rpart + rec_decisiontree.rpart)
 
 # Decision Tree with caret
 traincontroll.decisiontree.caret <- trainControl(method = "cv", number = 10)
@@ -32,8 +36,11 @@ model.decisiontree.caret <- train( formula, data = train, method = "ctree", trCo
 pred.decisiontree.caret <- predict(model.decisiontree.caret, test)
 cm_decisiontree.caret <- confusionMatrix(test$label, pred.decisiontree.caret)
 confusion_matrix.decisiontree.caret = table(test$label, pred.decisiontree.caret)
+# accuracy, precision, recall, f-measure
 acc_decisiontree.caret <- sum(diag(confusion_matrix.decisiontree.caret))/sum(confusion_matrix.decisiontree.caret)
-
+prec_decisiontree.caret <- diag(confusion_matrix.decisiontree.caret) / rowSums(confusion_matrix.decisiontree.caret)
+rec_decisiontree.caret <- diag(confusion_matrix.decisiontree.caret) / colSums(confusion_matrix.decisiontree.caret)
+f1_decisiontree.caret <- 2 * (prec_decisiontree.caret * rec_decisiontree.caret) / (prec_decisiontree.caret + rec_decisiontree.caret)
 
 ## plot confusion matrix
 # plot rpart confusion matrix

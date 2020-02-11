@@ -25,7 +25,11 @@ summary(model.svm.e1071.radial)
 pred.svm.e1071.radial <- predict(model.svm.e1071.radial, test)
 cm_svm.e1071.radial <- confusionMatrix(test$label, pred.svm.e1071.radial)
 confusion_matrix.svm.e1071.radial <- table(test$label, pred.svm.e1071.radial)
+# accuracy, precision, recall, f-measure
 acc_svm.e1071.radial <- sum(diag(confusion_matrix.svm.e1071.radial)) / sum(confusion_matrix.svm.e1071.radial)
+prec_svm.e1071.radial <- diag(confusion_matrix.svm.e1071.radial) / rowSums(confusion_matrix.svm.e1071.radial)
+rec_svm.e1071.radial <- diag(confusion_matrix.svm.e1071.radial) / colSums(confusion_matrix.svm.e1071.radial)
+f1_svm.e1071.radial <- 2 * (prec_svm.e1071.radial * rec_svm.e1071.radial) / (prec_svm.e1071.radial + rec_svm.e1071.radial)
 
 # SVM Model e1071, LINEAR
 model.svm.e1071.linear <- svm(formula,
@@ -38,7 +42,11 @@ summary(model.svm.e1071.linear)
 pred.svm.e1071.linear <- predict(model.svm.e1071.linear, test)
 cm_svm.e1071.linear <- confusionMatrix(test$label, pred.svm.e1071.linear)
 confusion_matrix.svm.e1071.linear <- table(test$label, pred.svm.e1071.linear)
+# accuracy, precision, recall, f-measure
 acc_svm.e1071.linear <- sum(diag(confusion_matrix.svm.e1071.linear)) / sum(confusion_matrix.svm.e1071.linear)
+prec_svm.e1071.linear <- diag(confusion_matrix.svm.e1071.linear) / rowSums(confusion_matrix.svm.e1071.linear)
+rec_svm.e1071.linear <- diag(confusion_matrix.svm.e1071.linear) / colSums(confusion_matrix.svm.e1071.linear)
+f1_svm.e1071.linear <- 2 * (prec_svm.e1071.linear * rec_svm.e1071.linear) / (prec_svm.e1071.linear + rec_svm.e1071.linear)
 
 # # SVM Model Caret, RADIAL
 # #trctrl <- trainControl(method = "repeatedcv", number = 10, repeats = 10, savePredictions = TRUE)
