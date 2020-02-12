@@ -50,7 +50,7 @@ Qui sotto viene riportata la tabella con una media dei valori di accuratezza ott
 ### **SVM**
 | SVM - e1071 (linear)| SVM - e1071 (radial) | SVM - caret (linear)| SVM - caret (radial) |
 |:--- |:--- |:--- |:--- | 
-| 0.40 | 0.45 | NaN | NaN |
+| 0.40 | 0.45 | 0.41 | 0.46 |
 
 ### **Naive Bayes**
 | Naive Bayes - e1071 | Naive Bayes - caret |
