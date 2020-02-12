@@ -2,6 +2,7 @@ library("e1071")
 library("caret")
 library("ggplot2")
 library("dplyr")
+library("doMC")
 
 # carico i dataset
 train = read.csv("train.csv", header=TRUE)
@@ -48,7 +49,8 @@ prec_svm.e1071.linear <- diag(confusion_matrix.svm.e1071.linear) / rowSums(confu
 rec_svm.e1071.linear <- diag(confusion_matrix.svm.e1071.linear) / colSums(confusion_matrix.svm.e1071.linear)
 f1_svm.e1071.linear <- 2 * (prec_svm.e1071.linear * rec_svm.e1071.linear) / (prec_svm.e1071.linear + rec_svm.e1071.linear)
 
-# SVM Model Caret, RADIAL (non termina)
+registerDoMC()
+#SVM Model Caret, RADIAL (non termina)
 trctrl <- trainControl(method = "cv", number = 10)
 set.seed(3233)
 model <- train(formula,
