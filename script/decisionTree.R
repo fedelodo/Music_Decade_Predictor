@@ -5,21 +5,38 @@ library("RColorBrewer")
 library("caret")
 library("ggplot2")
 library("dplyr")
+library("doMC")
+library("pROC")
 
 # carico i dataset
-train = read.csv("train.csv", header=TRUE)
-train$label <- as.factor(train$label)
-test = read.csv("test.csv", header=TRUE)
-test$label <- as.factor(test$label)
-# carico la formula 
-fileName <- 'formula.txt'
-formula <- readChar(fileName, file.info(fileName)$size)
-formula <- gsub("\n", "", formula)
-formula <- as.formula(formula)
+# train = read.csv("train.csv", header=TRUE)
+# train$label <- as.factor(train$label)
+# test = read.csv("test.csv", header=TRUE)
+# test$label <- as.factor(test$label)
 
+# carico i dataset PCA (o questo o quello sopra)
+train = read.csv("train_pca.csv", header=TRUE)
+train$label <- as.factor(train$label)
+test = read.csv("test_pca.csv", header=TRUE)
+test$label <- as.factor(test$label)
+
+# # carico la formula 
+# fileName <- 'formula.txt'
+# formula <- readChar(fileName, file.info(fileName)$size)
+# formula <- gsub("\n", "", formula)
+# formula <- as.formula(formula)
+
+registerDoMC()
 # Decision Tree with rpart
-model.decisiontree.rpart <- rpart(formula,
-                     data=train, method="class")
+# Con formula
+#model.decisiontree.rpart <- rpart(formula,
+#                                  data=train, method="class")
+
+# Con pca train
+model.decisiontree.rpart <- rpart(label ~.,
+                                  data=train, method="class")
+
+
 fancyRpartPlot(model.decisiontree.rpart)
 pred.decisiontree.rpart <- predict(model.decisiontree.rpart, test, type="class")
 cm_decisiontree.rpart <- confusionMatrix(test$label, pred.decisiontree.rpart)
@@ -30,9 +47,14 @@ prec_decisiontree.rpart <- diag(confusion_matrix.decisiontree.rpart) / rowSums(c
 rec_decisiontree.rpart <- diag(confusion_matrix.decisiontree.rpart) / colSums(confusion_matrix.decisiontree.rpart)
 f1_decisiontree.rpart <- 2 * (prec_decisiontree.rpart * rec_decisiontree.rpart) / (prec_decisiontree.rpart + rec_decisiontree.rpart)
 
+registerDoMC()
 # Decision Tree with caret
 traincontroll.decisiontree.caret <- trainControl(method = "cv", number = 10)
-model.decisiontree.caret <- train( formula, data = train, method = "ctree", trControl = traincontroll.decisiontree.caret, tuneLength = 10)
+#Con formula
+#model.decisiontree.caret <- train( formula, data = train, method = "ctree", trControl = traincontroll.decisiontree.caret, tuneLength = 10)
+#Con pca train
+model.decisiontree.caret <- train( label ~., data = train, method = "ctree", trControl = traincontroll.decisiontree.caret, tuneLength = 10)
+
 pred.decisiontree.caret <- predict(model.decisiontree.caret, test)
 cm_decisiontree.caret <- confusionMatrix(test$label, pred.decisiontree.caret)
 confusion_matrix.decisiontree.caret = table(test$label, pred.decisiontree.caret)
@@ -74,3 +96,33 @@ ggplot(data = plotTable.decisiontree.caret, mapping = aes(x = Reference, y = Pre
   theme_bw() +
   xlim(rev(levels(table.decisiontree.caret$Reference))) +
   ggtitle("Confusion Matrix: DECISION TREE with Caret (on Normalize)")
+
+
+## ROC/ AUC Plots
+#rpart e1071
+pred.roc.decisiontree.rpart <- as.numeric(pred.decisiontree.rpart)
+roc.multi_test.decisiontree.rpart <- multiclass.roc(test$label, pred.roc.decisiontree.rpart)
+rs_test.decisiontree.rpart <- roc.multi_test.decisiontree.rpart[['rocs']]
+roc.list.decisiontree.rpart <- list("1950-1960"=rs_test.decisiontree.rpart[[1]],"1950-1970"=rs_test.decisiontree.rpart[[2]],
+                                    "1950-1980"=rs_test.decisiontree.rpart[[3]],"1950-1990"=rs_test.decisiontree.rpart[[4]],
+                                    "1950-2000"=rs_test.decisiontree.rpart[[5]],"1960-1970"=rs_test.decisiontree.rpart[[6]],
+                                    "1960-1980"=rs_test.decisiontree.rpart[[7]],"1960-1990"=rs_test.decisiontree.rpart[[8]],
+                                    "1960-2000"=rs_test.decisiontree.rpart[[9]],"1970-1980"=rs_test.decisiontree.rpart[[10]],
+                                    "1970-1990"=rs_test.decisiontree.rpart[[11]],"1970-2000"=rs_test.decisiontree.rpart[[12]],
+                                    "1980-1990"=rs_test.decisiontree.rpart[[13]],"1980-2000"=rs_test.decisiontree.rpart[[14]],
+                                    "1990-2000"=rs_test.decisiontree.rpart[[15]])
+ggroc(roc.list.decisiontree.rpart, legacy.axes = TRUE) + geom_abline() + ggtitle("DECISION TREE ROC curve rpart") + geom_line(size=2.5)
+
+#ctree caret
+pred.roc.decisiontree.caret <- as.numeric(pred.decisiontree.caret)
+roc.multi_test.decisiontree.caret <- multiclass.roc(test$label, pred.roc.decisiontree.caret)
+rs_test.decisiontree.caret <- roc.multi_test.decisiontree.caret[['rocs']]
+roc.list.decisiontree.caret <- list("1950-1960"=rs_test.decisiontree.caret[[1]],"1950-1970"=rs_test.decisiontree.caret[[2]],
+                                    "1950-1980"=rs_test.decisiontree.caret[[3]],"1950-1990"=rs_test.decisiontree.caret[[4]],
+                                    "1950-2000"=rs_test.decisiontree.caret[[5]],"1960-1970"=rs_test.decisiontree.caret[[6]],
+                                    "1960-1980"=rs_test.decisiontree.caret[[7]],"1960-1990"=rs_test.decisiontree.caret[[8]],
+                                    "1960-2000"=rs_test.decisiontree.caret[[9]],"1970-1980"=rs_test.decisiontree.caret[[10]],
+                                    "1970-1990"=rs_test.decisiontree.caret[[11]],"1970-2000"=rs_test.decisiontree.caret[[12]],
+                                    "1980-1990"=rs_test.decisiontree.caret[[13]],"1980-2000"=rs_test.decisiontree.caret[[14]],
+                                    "1990-2000"=rs_test.decisiontree.caret[[15]])
+ggroc(roc.list.decisiontree.caret, legacy.axes = TRUE) + geom_abline() + ggtitle("DECISION TREE ROC curve caret(ctree)") + geom_line(size=2.5)
