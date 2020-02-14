@@ -30,7 +30,7 @@ confusion_matrix.bayes.e1071 <- table(test$label, pred.bayes.e1071)
 # accuracy, precision, recall, f-measure
 acc_bayes.e1071 <- sum(diag(confusion_matrix.bayes.e1071))/sum(confusion_matrix.bayes.e1071)
 prec_bayes.e1071 <- diag(confusion_matrix.bayes.e1071) / rowSums(confusion_matrix.bayes.e1071)
-rec_bayes.e1071 <- diag(confusion_matrix.bayes.e1071) / rowSums(confusion_matrix.bayes.e1071)
+rec_bayes.e1071 <- diag(confusion_matrix.bayes.e1071) / colSums(confusion_matrix.bayes.e1071)
 f1_bayes.e1071 <- 2 * (prec_bayes.e1071 * rec_bayes.e1071) / (prec_bayes.e1071 + rec_bayes.e1071)
 
 registerDoMC()
@@ -60,7 +60,7 @@ ggplot(data = plotTable.bayes.caret, mapping = aes(x = Reference, y = Prediction
   scale_fill_manual(values = c(good = "green", bad = "red")) +
   theme_bw() +
   xlim(rev(levels(table.bayes.caret$Reference))) +
-  ggtitle("Confusion Matrix: NAIVE BAYES with Caret (on Normalize)")
+  ggtitle("Confusion Matrix: NAIVE BAYES with Caret")
 
 # plot e1071 confusion matrix
 table.bayes.e1071 <- data.frame(cm_bayes.e1071$table)
@@ -76,7 +76,7 @@ ggplot(data = plotTable.bayes.e1071, mapping = aes(x = Reference, y = Prediction
   scale_fill_manual(values = c(good = "green", bad = "red")) +
   theme_bw() +
   xlim(rev(levels(table.bayes.e1071$Reference))) +
-  ggtitle("Confusion Matrix: NAIVE BAYES with e1071 (on Normalize)")
+  ggtitle("Confusion Matrix: NAIVE BAYES with e1071")
 
 
 ## ROC/ AUC Plots
@@ -92,7 +92,7 @@ roc.list.bayes.e1071 <- list("1950-1960"=rs_test.bayes.e1071[[1]],"1950-1970"=rs
                                     "1970-1990"=rs_test.bayes.e1071[[11]],"1970-2000"=rs_test.bayes.e1071[[12]],
                                     "1980-1990"=rs_test.bayes.e1071[[13]],"1980-2000"=rs_test.bayes.e1071[[14]],
                                     "1990-2000"=rs_test.bayes.e1071[[15]])
-ggroc(roc.list.bayes.e1071, legacy.axes = TRUE) + geom_abline() + ggtitle("NAIVE BAYES ROC curve e1071") + geom_line(size=2.5)
+ggroc(roc.list.bayes.e1071, legacy.axes = TRUE) + geom_abline() + ggtitle("NAIVE BAYES ROC curve e1071") + geom_line(size=1)
 
 #naive bayes caret
 pred.roc.bayes.caret <- as.numeric(pred.bayes.caret)
@@ -106,4 +106,4 @@ roc.list.bayes.caret <- list("1950-1960"=rs_test.bayes.caret[[1]],"1950-1970"=rs
                                     "1970-1990"=rs_test.bayes.caret[[11]],"1970-2000"=rs_test.bayes.caret[[12]],
                                     "1980-1990"=rs_test.bayes.caret[[13]],"1980-2000"=rs_test.bayes.caret[[14]],
                                     "1990-2000"=rs_test.bayes.caret[[15]])
-ggroc(roc.list.bayes.caret, legacy.axes = TRUE) + geom_abline() + ggtitle("NAIVE BAYES ROC curve caret") + geom_line(size=2.5)
+ggroc(roc.list.bayes.caret, legacy.axes = TRUE) + geom_abline() + ggtitle("NAIVE BAYES ROC curve caret") + geom_line(size=1)

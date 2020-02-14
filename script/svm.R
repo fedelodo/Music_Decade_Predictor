@@ -55,7 +55,7 @@ f1_svm.e1071.radial <- 2 * (prec_svm.e1071.radial * rec_svm.e1071.radial) / (pre
 # model.svm.e1071.linear <- svm(formula,
 #                     data = train,
 #                     kernel='linear',
-#                     method='C-classification',
+#                     method='C-classification',  
 #                     cost=1,
 #                     probability =TRUE)
 # summary(model.svm.e1071.linear)
@@ -123,7 +123,7 @@ ggplot(data = plotTable.svm.e1071.radial, mapping = aes(x = Reference, y = Predi
   scale_fill_manual(values = c(good = "green", bad = "red")) +
   theme_bw() +
   xlim(rev(levels(table.svm.e1071.radial$Reference))) +
-  ggtitle("Confusion Matrix: SVM - Radial with e1071 (on Normalize)")
+  ggtitle("Confusion Matrix: SVM - Radial with e1071")
 
 # plot caret confusion matrix
 table.svm.caret.radial <- data.frame(cm_svm.caret.radial$table)
@@ -139,7 +139,7 @@ ggplot(data = plotTable.svm.caret.radial, mapping = aes(x = Reference, y = Predi
   scale_fill_manual(values = c(good = "green", bad = "red")) +
   theme_bw() +
   xlim(rev(levels(table.svm.caret.radial$Reference))) +
-  ggtitle("Confusion Matrix: SVM - Radial with caret (on Normalize)")
+  ggtitle("Confusion Matrix: SVM - Radial with caret")
 
 
 ## ROC/ AUC Plots

@@ -79,7 +79,7 @@ ggplot(data = plotTable.decisiontree.rpart, mapping = aes(x = Reference, y = Pre
   scale_fill_manual(values = c(good = "green", bad = "red")) +
   theme_bw() +
   xlim(rev(levels(table.decisiontree.rpart$Reference))) +
-  ggtitle("Confusion Matrix: DECISION TREE with rpart (on Normalize)")
+  ggtitle("Confusion Matrix: DECISION TREE with rpart")
 
 # plot caret confusion matrix
 table.decisiontree.caret <- data.frame(cm_decisiontree.caret$table)
@@ -95,7 +95,7 @@ ggplot(data = plotTable.decisiontree.caret, mapping = aes(x = Reference, y = Pre
   scale_fill_manual(values = c(good = "green", bad = "red")) +
   theme_bw() +
   xlim(rev(levels(table.decisiontree.caret$Reference))) +
-  ggtitle("Confusion Matrix: DECISION TREE with Caret (on Normalize)")
+  ggtitle("Confusion Matrix: DECISION TREE with Caret")
 
 
 ## ROC/ AUC Plots
