@@ -26,7 +26,7 @@ Il nostro obbiettivo è quello di predire l'anno in cui un brano è stato scritt
 # Usage
 La prima cosa da fare è sistemare il dataset eseguendo il seguente scriptfile:
 
-* ``` data_preprocessing_&_correlation.R ```: questo script serve per elaborare i dati preparandoli per la fase di training, fare un downsampling per bilanciare il dataset, splittare i dati in train e test set e effettuare la **PCA**, in quest'ultima parte sono state utilizzate le librerie [FactorMineR](https://www.rdocumentation.org/packages/FactoMineR/versions/2.1), [factorextra](https://www.rdocumentation.org/packages/factoextra/versions/1.0.3) e [corrplot](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html).
+* ``` data_preprocessing_&_correlation_PCA.R ```: questo script serve per elaborare i dati preparandoli per la fase di training, fare un downsampling per bilanciare il dataset, splittare i dati in train e test set e effettuare la **PCA**, in quest'ultima parte sono state utilizzate le librerie [FactorMineR](https://www.rdocumentation.org/packages/FactoMineR/versions/2.1), [factorextra](https://www.rdocumentation.org/packages/factoextra/versions/1.0.3) e [corrplot](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html).
 
 Una volta che il dataset è stato elaborato e splittato in *train.csv* per il trainset e *test.csv* per il testset possono essere eseguiti i vari script (in ordine qualsiasi):
 
@@ -55,4 +55,4 @@ Qui sotto viene riportata la tabella con una media dei valori di accuratezza ott
 ### **Naive Bayes**
 | Naive Bayes - e1071 | Naive Bayes - caret |
 |:--- |:--- |
-| 0.67 | 0.79 |
+| 0.93 | 0.95 |
