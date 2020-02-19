@@ -38,7 +38,7 @@ These are accuracy results for each model:
 | 0.34 | 0.33 |
 
 ### **SVM**
-| SVM - e1071 (radial) SVM - caret (radial) |
+| SVM - e1071 (radial) | SVM - caret (radial) |
 |:--- |:--- | 
 | 0.45 | 0.46 |
 
