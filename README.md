@@ -30,7 +30,7 @@ After, these scripts can be run in random order. They represent the models used 
 * ``` naive_bayes.R ```: libraries used are [**e1071**](https://www.rdocumentation.org/packages/e1071/versions/1.7-3) and [**caret**](http://topepo.github.io/caret/index.html)
 
 # Results
-These are accuracy results for each model:
+These are accuracy results for each model.
 
 ### **Decision Tree**
 | DecisionTree - rpart | DecisionTree - caret |
