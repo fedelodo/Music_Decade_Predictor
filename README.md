@@ -12,7 +12,7 @@ The aim of the project is to apply different machine learning techniques to a da
 
 ## Dataset
 
-[Audio features of songs ranging from 1922 to 2011](https://www.kaggle.com/uciml/msd-audio-features) from kaggle.
+[Audio features of songs ranging from 1922 to 2011](https://www.kaggle.com/uciml/msd-audio-features) from Kaggle.
 
 ## Aim
 Predict the decade of release of a song.
