@@ -56,3 +56,9 @@ Qui sotto viene riportata la tabella con una media dei valori di accuratezza ott
 | Naive Bayes - e1071 | Naive Bayes - caret |
 |:--- |:--- |
 | 0.93 | 0.95 |
+
+# NOTE
+
+* No a matrice di correlazione per valutare dati non numerici, no se il target è diviso in classi.
+* Decision Tree (rpart) possiede un parametro "cp" che va regolato, altrimenti taglia l'albero.
+* Le ROC non denotano la separazione delle classi.
