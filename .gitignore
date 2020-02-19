@@ -1,5 +1,7 @@
 .RData
 .Rhistory
-test.csv
 train.csv
-formula.txt
+train_pca.csv
+test.csv
+test_pca.csv
+plots

@@ -18,17 +18,9 @@ cdf$label[cdf$label >= 2000 & cdf$label <= 2009] <- 2000
 cdf$label <- as.factor(cdf$label)
 plot(cdf$label)
 
-# MATRICE DI CORRELAZIONE
-#M <- cor(cdf)
-#corrplot(M, method="circle")
-
 rdata <- downsample(cdf, cat_col="label")
 plot(rdata$label)
-rdata <- normalize(rdata, method = "range", range = c(0, 1))
-
-# MATRICE DI CORRELAZIONE
-# M <- cor(rdata[,-1])
-# corrplot(M, method="square")
+#rdata <- normalize(rdata, method = "range", range = c(0, 1))
 
 ## DATA SPLITTING
 # split dataset function
@@ -58,13 +50,11 @@ test.data.pca <- predict(res.pca, subset(test, select = -label))
 test.data.pca <- as.data.frame(test.data.pca$coord)
 test.data.pca <- test.data.pca %>% select(1:44)
 
-
 train.data.pca <- data.frame(label = train$label, train.data.pca)
 test.data.pca <- data.frame(label = test$label, test.data.pca)
 
 # scrittura file csv  
 write.csv(train, "train.csv", row.names = FALSE)
 write.csv(test, "test.csv", row.names = FALSE)
-
 write.csv(train.data.pca, "train_pca.csv", row.names = FALSE)
 write.csv(test.data.pca, "test_pca.csv", row.names = FALSE)
